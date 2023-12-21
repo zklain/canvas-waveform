@@ -7,6 +7,8 @@ import { useDrag } from "@use-gesture/react";
 
 // todo: colors
 // TODO: dpi
+// TODO: bars should take full height of the canvas
+
 export const WaveformCanvas = memo(
   ({
     waveform,
@@ -28,6 +30,12 @@ export const WaveformCanvas = memo(
     const height = Math.floor(canvasHeight);
 
     const [progress, setProgress] = useState(0);
+
+    useEffect(() => {
+      const width = Math.floor(waveform.length * (gap + barWidth));
+      //  const height = Math.floor(canvasHeight);
+      canvasRef.current.width = width;
+    }, [gap, barWidth, waveform]);
 
     useControls(() => ({
       progress: {
@@ -72,7 +80,6 @@ export const WaveformCanvas = memo(
       } as React.MouseEvent<HTMLDivElement>);
     });
 
-    // TODO: bars should take full height of the canvas
     return (
       <div
         {...dragEvents()}
@@ -138,13 +145,28 @@ function App() {
   //   }
   // };
 
+  const { gap, width } = useControls({
+    gap: {
+      value: 6,
+      min: 0,
+      max: 10,
+    },
+    width: {
+      value: 3,
+      min: 0,
+      max: 10,
+    },
+  });
+
   return (
     <>
       <div>
         <h1>Waveform</h1>
         {/* <button onClick={onButtonPress}>{playing ? "Pause" : "Play"}</button> */}
         {/* <audio ref={audioRef} src="/URN-resides-in-them.mp3" /> */}
-        {waveform ? <WaveformCanvas waveform={waveform} /> : null}
+        {waveform ? (
+          <WaveformCanvas waveform={waveform} gap={gap} barWidth={width} />
+        ) : null}
       </div>
     </>
   );
