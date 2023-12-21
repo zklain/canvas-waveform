@@ -86,7 +86,7 @@ export function drawBarsWave(
   const ctx = canvas.getContext("2d");
 
   if (!ctx) return;
-  const dpi = window.devicePixelRatio;
+  //   const dpi = window.devicePixelRatio;
   //   ctx.scale(dpi, dpi);
 
   // progress goes from 0 - 1 so we need to multiply it by the length of the waveform
@@ -95,6 +95,7 @@ export function drawBarsWave(
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   for (let i = 0; i < waveform.length; i++) {
+    ctx.beginPath();
     const bar = getBarCoordinates(
       i,
       waveform[i],
@@ -102,7 +103,6 @@ export function drawBarsWave(
       options.barWidth,
       options.gap
     );
-    ctx.beginPath();
     ctx.rect(...bar);
     if (i < p) {
       ctx.fillStyle = "#f73e00";

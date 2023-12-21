@@ -5,6 +5,7 @@ import "./App.css";
 import { drawBarsWave, getDrawData, normalizeData } from "./utils";
 
 // todo: colors
+// TODO: dpi
 export const WaveformCanvas = memo(
   ({
     waveform,
@@ -62,17 +63,6 @@ export const WaveformCanvas = memo(
       setProgress(percentage / 100);
     };
 
-    const onDrag = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const { width, left } = e.currentTarget.getBoundingClientRect();
-      const offset = e.clientX - left;
-      let percentage = (offset / width) * 100;
-      if (percentage < 0) percentage = 0;
-      if (percentage > 100) percentage = 100;
-      setProgress(percentage / 100);
-    };
-
     // TODO: bars should take full height of the canvas
     return (
       <div
@@ -81,7 +71,6 @@ export const WaveformCanvas = memo(
         aria-valuemin={0}
         aria-live="assertive"
         aria-valuemax={100}
-        onDrag={onDrag}
         onClick={onClick}
         style={{
           width: "50vw",
@@ -91,6 +80,7 @@ export const WaveformCanvas = memo(
           justifyContent: "center",
           margin: 30,
         }}
+        draggable
       >
         <canvas
           style={{
