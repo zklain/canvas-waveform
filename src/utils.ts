@@ -94,6 +94,7 @@ export function drawBarsWave(
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // TODO: render progress separately on top?
   for (let i = 0; i < waveform.length; i++) {
     ctx.beginPath();
     const bar = getBarCoordinates(

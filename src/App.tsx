@@ -3,6 +3,7 @@ import { memo, useEffect, useRef, useState } from "react";
 import WaveformData from "waveform-data";
 import "./App.css";
 import { drawBarsWave, getDrawData, normalizeData } from "./utils";
+import { useDrag } from "@use-gesture/react";
 
 // todo: colors
 // TODO: dpi
@@ -35,7 +36,6 @@ export const WaveformCanvas = memo(
         max: 1,
         onChange: (v) => {
           setProgress(v);
-          // progress.current = v;
         },
       },
     }));
@@ -63,9 +63,19 @@ export const WaveformCanvas = memo(
       setProgress(percentage / 100);
     };
 
+    const dragEvents = useDrag(({ event, down }) => {
+      event.stopPropagation?.();
+      if (!down) return;
+      onClick({
+        clientX: (event as MouseEvent).clientX,
+        currentTarget: event.currentTarget,
+      } as React.MouseEvent<HTMLDivElement>);
+    });
+
     // TODO: bars should take full height of the canvas
     return (
       <div
+        {...dragEvents()}
         role="progressbar"
         tabIndex={0}
         aria-valuemin={0}
