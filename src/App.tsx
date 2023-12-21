@@ -1,5 +1,5 @@
 import { useControls } from "leva";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import WaveformData from "waveform-data";
 import "./App.css";
 import { drawBarsWave, getDrawData, normalizeData } from "./utils";
@@ -126,8 +126,7 @@ function App() {
         const data = await res.json();
         const waveform = WaveformData.create(data);
         const normalized = normalizeData(waveform);
-        const drawData = getDrawData(normalized);
-        setWaveform(drawData);
+        setWaveform(normalized);
       } else {
         throw new Error("Error fetching data.");
       }
@@ -145,7 +144,7 @@ function App() {
   //   }
   // };
 
-  const { gap, width } = useControls({
+  const { gap, width, segments } = useControls({
     gap: {
       value: 6,
       min: 0,
@@ -158,7 +157,20 @@ function App() {
       max: 10,
       step: 1,
     },
+    segments: {
+      value: 168,
+      min: 50,
+      max: 300,
+      step: 10,
+    },
   });
+
+  const renderData = useMemo(() => {
+    if (waveform) {
+      const drawData = getDrawData(waveform, segments);
+      return drawData;
+    }
+  }, [segments, waveform]);
 
   return (
     <>
@@ -166,8 +178,8 @@ function App() {
         <h1>Waveform</h1>
         {/* <button onClick={onButtonPress}>{playing ? "Pause" : "Play"}</button> */}
         {/* <audio ref={audioRef} src="/URN-resides-in-them.mp3" /> */}
-        {waveform ? (
-          <WaveformCanvas waveform={waveform} gap={gap} barWidth={width} />
+        {renderData ? (
+          <WaveformCanvas waveform={renderData} gap={gap} barWidth={width} />
         ) : null}
       </div>
     </>
