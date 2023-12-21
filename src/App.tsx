@@ -80,7 +80,6 @@ export const WaveformCanvas = memo(
           justifyContent: "center",
           margin: 30,
         }}
-        draggable
       >
         <canvas
           style={{
