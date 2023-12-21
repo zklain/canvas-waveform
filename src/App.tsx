@@ -150,11 +150,13 @@ function App() {
       value: 6,
       min: 0,
       max: 10,
+      step: 1,
     },
     width: {
       value: 3,
-      min: 0,
+      min: 1,
       max: 10,
+      step: 1,
     },
   });
 
